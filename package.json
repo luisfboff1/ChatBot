@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
-    "@langchain/community": "^0.3.55",
     "@langchain/openai": "^0.6.11",
     "@prisma/client": "^5.17.0",
     "@types/qrcode": "^1.5.5",
