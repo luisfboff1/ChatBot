@@ -66,8 +66,7 @@ export async function GET(
         _count: {
           select: {
             conversations: true,
-            documents: true,
-            messages: true
+            documents: true
           }
         }
       }
