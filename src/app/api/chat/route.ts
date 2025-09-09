@@ -109,11 +109,11 @@ export async function POST(req: NextRequest) {
   const finalPrompt = `${enhancedPrompt}\n\n## REASONING EXECUTADO:\n${reasoningContext}\n\n## RESPOSTA BASEADA NO REASONING:\n${reasoningAnswer}\n\n## INSTRUÇÕES FINAIS:\nUse as informações do reasoning acima para fornecer uma resposta completa e personalizada. Se o reasoning já forneceu uma resposta adequada, use-a como base e melhore-a.`;
   
   const messages = [
-    { role: 'system', content: finalPrompt },
+    { role: 'system' as const, content: finalPrompt },
     ...conversationHistory
       .filter(m => m.role !== 'system') // Remover system messages do histórico
-      .map(m => ({ role: m.role, content: m.text })),
-    { role: 'user', content: message }
+      .map(m => ({ role: m.role as 'user' | 'assistant', content: m.text })),
+    { role: 'user' as const, content: message }
   ];
 
   let reply = '';
