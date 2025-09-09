@@ -144,7 +144,10 @@ export async function searchRelevantDocuments(
     const similarities = embeddings.map(emb => {
       const embeddingArray = JSON.parse(emb.embedding) as number[];
       return {
-        document: emb.document,
+        document: {
+          ...emb.document,
+          type: emb.document.type as "website" | "pdf" | "txt" | "md" | "manual"
+        },
         similarity: cosineSimilarity(queryEmbedding, embeddingArray),
         chunk: emb.chunk
       };
