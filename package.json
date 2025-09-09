@@ -18,7 +18,10 @@
     "@langchain/core": "^0.3.75",
     "@langchain/openai": "^0.6.11",
     "@prisma/client": "^5.17.0",
+    "@types/node": "^20.19.13",
     "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "^18.2.22",
     "@whiskeysockets/baileys": "^7.0.0-rc.2",
     "ai": "^3.4.33",
     "dotenv": "^17.2.2",
@@ -26,20 +29,17 @@
     "next": "14.2.5",
     "ollama": "^0.5.17",
     "openai": "^4.56.0",
+    "prisma": "^5.17.0",
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "tsx": "^4.7.2",
+    "typescript": "^5.9.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^20.19.13",
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.2.22",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
-    "prisma": "^5.17.0",
-    "tsx": "^4.7.2",
-    "typescript": "^5.9.2"
+    "eslint-config-next": "14.2.5"
   }
 }
