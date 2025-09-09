@@ -1,0 +1,21 @@
+{
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "DATABASE_URL": "@database_url",
+    "GROQ_API_KEY": "@groq_api_key",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "NEXTAUTH_URL": "@nextauth_url"
+  },
+  "build": {
+    "env": {
+      "DATABASE_URL": "@database_url"
+    }
+  },
+  "regions": ["iad1"],
+  "framework": "nextjs"
+}

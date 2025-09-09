@@ -1,0 +1,137 @@
+// Schema para PostgreSQL (Supabase)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id          String   @id @default(cuid())
+  name        String
+  plan        String   @default("free")
+  whatsappNumber String?
+  status      String   @default("active") // active, inactive, suspended
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       Membership[]
+  prompts     PromptOverride[]
+  conversations Conversation[]
+  memories    LongTermMemory[]
+  documents   Document[]
+  embeddings  Embedding[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  createdAt      DateTime @default(now())
+  tenants        Membership[]
+  messages       Message[]
+  conversations  Conversation[]
+}
+
+model Membership {
+  id        String   @id @default(cuid())
+  role      String   // OWNER, ADMIN, MEMBER
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tenantId])
+}
+
+model PromptTemplate {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  content   String
+  version   Int      @default(1)
+  isGlobal  Boolean  @default(true)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  overrides PromptOverride[]
+}
+
+model PromptOverride {
+  id          String   @id @default(cuid())
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId    String
+  template    PromptTemplate @relation(fields: [templateId], references: [id])
+  templateId  String
+  content     String?
+  version     Int      @default(1)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@unique([tenantId, templateId])
+}
+
+model Conversation {
+  id        String   @id @default(cuid())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
+  title     String
+  whatsappNumber String?
+  createdAt DateTime @default(now())
+  messages  Message[]
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
+  user           User?    @relation(fields: [userId], references: [id])
+  userId         String?
+  role           String
+  text           String
+  tokens         Int?
+  cost           Float?
+  createdAt      DateTime @default(now())
+}
+
+model LongTermMemory {
+  id        String   @id @default(cuid())
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  key       String
+  value     String
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  @@unique([tenantId, key])
+}
+
+model Document {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  type      String   // pdf, txt, md, website, manual
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  embeddings Embedding[]
+
+  @@index([tenantId])
+}
+
+model Embedding {
+  id         String   @id @default(cuid())
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String
+  chunk      String
+  embedding  String   // JSON array of numbers
+  metadata   String?  // JSON metadata
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId   String
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId])
+}
