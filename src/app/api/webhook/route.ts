@@ -33,13 +33,14 @@ export async function POST(req: NextRequest) {
     const aiResponse = await processWithAI(body, tenantId, phoneNumber);
 
     // Enviar resposta via WhatsApp
-    await client.messages.create({
-      from: twilioPhoneNumber,
-      to: from,
-      body: aiResponse
-    });
+    // TODO: Implementar envio via WhatsApp (Twilio ou Baileys)
+    // await client.messages.create({
+    //   from: twilioPhoneNumber,
+    //   to: from,
+    //   body: aiResponse
+    // });
 
-    console.log('Resposta enviada para WhatsApp:', aiResponse);
+    console.log('Resposta gerada para WhatsApp:', aiResponse);
 
     return new NextResponse('OK', { status: 200 });
   } catch (error) {
